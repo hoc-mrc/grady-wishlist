@@ -56,10 +56,11 @@ async function loadGifts() {
 
     const button = document.createElement("button");
     button.className = "claim-btn " + (gift.claimed ? "claimed" : "unclaimed");
-    button.textContent = gift.claimed ? "Already Claimed" : "Claim This Gift";
-    button.disabled = gift.claimed;
+    button.textContent = gift.claimed ? "Unclaim" : "Claim This Gift";
 
-    button.addEventListener("click", () => claimGift(gift.id));
+    button.addEventListener("click", () =>
+      gift.claimed ? unclaimGift(gift.id) : claimGift(gift.id)
+    );
 
     card.appendChild(title);
 
@@ -79,17 +80,14 @@ async function loadGifts() {
 }
 
 async function claimGift(id) {
-  const { error } = await db
-    .from("gifts")
-    .update({ claimed: true })
-    .eq("id", id);
+  const { error } = await db.from("gifts").update({ claimed: true }).eq("id", id);
+  if (error) { alert("Hmm, that didn't work. Try again!"); console.error(error); return; }
+  loadGifts();
+}
 
-  if (error) {
-    alert("Hmm, that didn't work. Try again!");
-    console.error(error);
-    return;
-  }
-
+async function unclaimGift(id) {
+  const { error } = await db.from("gifts").update({ claimed: false }).eq("id", id);
+  if (error) { alert("Hmm, that didn't work. Try again!"); console.error(error); return; }
   loadGifts();
 }
 

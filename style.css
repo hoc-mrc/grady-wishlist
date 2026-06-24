@@ -118,6 +118,11 @@ body {
   color: #86868b;
 }
 
+.claim-btn.claimed:hover {
+  background: #ffe5e5;
+  color: #ff3b30;
+}
+
 .gift-card.is-claimed {
   opacity: 0.6;
 }
