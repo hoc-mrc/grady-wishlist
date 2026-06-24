@@ -1,3 +1,30 @@
+const SECRET = "grady2026";
+
+const gate = document.getElementById("gate");
+const app = document.getElementById("app");
+
+function unlock() {
+  gate.style.display = "none";
+  app.style.display = "block";
+  loadGifts();
+}
+
+if (location.hash === "#" + SECRET) {
+  unlock();
+} else {
+  gate.style.display = "flex";
+  document.getElementById("gate-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const val = document.getElementById("gate-input").value.trim();
+    if (val === SECRET) {
+      history.replaceState(null, "", "#" + SECRET);
+      unlock();
+    } else {
+      document.getElementById("gate-error").textContent = "Incorrect code — try again.";
+    }
+  });
+}
+
 // These two values connect us to Grady's gift database on Supabase.
 const SUPABASE_URL = "https://tubbafjvtoiiqdtehwlh.supabase.co";
 const SUPABASE_KEY = "sb_publishable_GQlfSDq2mwpYU7PsZTDJvQ_rk-Nkb2F";
